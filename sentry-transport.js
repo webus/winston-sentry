@@ -89,6 +89,13 @@ Sentry.prototype.log = function (level, msg, meta, callback) {
           meta.message = msg + ". cause: " + meta.message;
           msg = meta;
         }
+      } else if ('error' in meta) {
+          if (msg != '') {
+              meta.error.message = msg + ". cause: " + meta.error.message;
+          }
+          msg = meta.error;
+          delete meta.error;
+          delete extra.extra.error;
       }
 
       Raven.captureException(msg, extra, function() {
